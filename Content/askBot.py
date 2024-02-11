@@ -3,6 +3,7 @@ import gradio
 
 count = 2
 tempString = ""
+actual_input = ""
 words = []
 mystery_blurb = ""
 correct_guess = "Nice guess that was the missing word keep going!\n"
@@ -37,7 +38,7 @@ def replace_first_underscore_sequence(input_string, first_word):
     return output_string
 
 client = OpenAI(
-    api_key = "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"
+    api_key = "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"
 )
 
 messages = [{"role": "system", "content": ""}] #change content to whatever we want
@@ -50,10 +51,13 @@ def CustomChatGPT(user_input):
     global correct_guess
     global no_no_word
     if count == 0:  
-        if user_input == words[0]:
+        if actual_input == words[0]:
             mystery_blurb = replace_first_underscore_sequence(mystery_blurb, words[0])
-            if words.len() == 1:
+            if len(words)== 1:
                 count = 2
+                tempString = ""
+                words = []
+                no_no_word = ""
                 return mystery_blurb + "\nCongratulations you solved the the braindrAIn!, to keep on playing type a new topic."
             words = words[1:]
             return mystery_blurb + "\n" + correct_guess
@@ -68,7 +72,7 @@ def CustomChatGPT(user_input):
                 max_tokens=150
             )
             chatGPT_reply = response.choices[0].message.content
-            return mystery_blurb + "\nWrong, Hint:" + chatGPT_reply + "\n" + words[0]
+            return mystery_blurb + "\nWrong, Hint:" + chatGPT_reply 
         
     if count == 1:
         count = 0
@@ -87,6 +91,7 @@ def CustomChatGPT(user_input):
         return mystery_blurb + "\n" + chatGPT_reply + words[0] + words[1]+words[2]+words[3]+words[4]
     
     if count == 2:
+        mystery_blurb = ""
         count = 1
         message = [{"role": "system", "content": "You are a chatbot that will soon be given a topic to discuss. Provide a blurb that's  400 characters that contains some facts and random details."}]
         message.append({"role": "user", "content": user_input})
@@ -103,6 +108,8 @@ def CustomChatGPT(user_input):
         return chatGPT_reply
 
 def chatgpt_clone(input,history):
+    global actual_input 
+    actual_input = input
     history = history or []
     s = list(sum(history, ()))
     s.append(input)
