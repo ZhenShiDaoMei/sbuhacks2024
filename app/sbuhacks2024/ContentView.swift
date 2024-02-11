@@ -16,6 +16,10 @@ struct ContentView: View {
                     .font(.headline)
                     .padding()
                 Spacer()
+                Text(viewModel.outputText)
+                    .padding()
+                    .lineSpacing(10)
+                Spacer()
                 HStack {
                     TextField("Guess the word at the first blank!", text: $inputText)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -35,6 +39,7 @@ struct ContentView: View {
                     }
                     .padding(.trailing, 17)
                 }
+                Spacer()
             }
             else if (showSecondView) {
                 Text("braindrAIn")
@@ -71,6 +76,7 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 20)
                 Button(action: {
+                    viewModel.fetchGeneratedText(prompt: "")
                     isSpinning.toggle()
                     inputText = ""
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
@@ -93,12 +99,13 @@ struct ContentView: View {
             } else {
                 Spacer()
                 Spacer()
-                Image(systemName: "brain") // Your actual logo here
+                Image("braindrainlogo")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 200, height: 200)
+                    .frame(width: 400, height: 400)
                 Text("braindrAIn")
                     .font(.system(size: 50))
+                    .padding(.top, -50)
                 Text("Let's test your memory!")
                     .font(.headline)
                 HStack {
