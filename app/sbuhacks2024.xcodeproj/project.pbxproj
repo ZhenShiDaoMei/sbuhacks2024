@@ -14,6 +14,7 @@
 		93E8604B2B77275B00D7544C /* sbuhacks2024Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E8604A2B77275B00D7544C /* sbuhacks2024Tests.swift */; };
 		93E860552B77275B00D7544C /* sbuhacks2024UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E860542B77275B00D7544C /* sbuhacks2024UITests.swift */; };
 		93E860572B77275B00D7544C /* sbuhacks2024UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E860562B77275B00D7544C /* sbuhacks2024UITestsLaunchTests.swift */; };
+		93E860642B7830C000D7544C /* ContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E860632B7830C000D7544C /* ContentViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		93E860502B77275B00D7544C /* sbuhacks2024UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = sbuhacks2024UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		93E860542B77275B00D7544C /* sbuhacks2024UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sbuhacks2024UITests.swift; sourceTree = "<group>"; };
 		93E860562B77275B00D7544C /* sbuhacks2024UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sbuhacks2024UITestsLaunchTests.swift; sourceTree = "<group>"; };
+		93E860632B7830C000D7544C /* ContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			children = (
 				93E860392B77275800D7544C /* sbuhacks2024App.swift */,
 				93E8603B2B77275800D7544C /* ContentView.swift */,
+				93E860632B7830C000D7544C /* ContentViewModel.swift */,
 				93E8603D2B77275A00D7544C /* Assets.xcassets */,
 				93E8603F2B77275A00D7544C /* Preview Content */,
 			);
@@ -259,6 +262,7 @@
 			files = (
 				93E8603C2B77275800D7544C /* ContentView.swift in Sources */,
 				93E8603A2B77275800D7544C /* sbuhacks2024App.swift in Sources */,
+				93E860642B7830C000D7544C /* ContentViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

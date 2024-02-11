@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Load your API key from an environment variable or other secure location
 client = OpenAI(
-    api_key = "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"
+    api_key = "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"
 )
 
 @app.route('/generate-text', methods=['POST'])
