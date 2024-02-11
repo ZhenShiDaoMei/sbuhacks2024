@@ -44,7 +44,7 @@ def replace_first_underscore_sequence(input_string, first_word):
 
 # Load your API key from an environment variable or other secure location
 client = OpenAI(
-    api_key = "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"
+    api_key = "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"
 )
 
 @app.route('/generate-text', methods=['POST'])
@@ -57,13 +57,19 @@ def generateChatGPT():
     global no_no_word
     data = request.get_json()
     if count == 0:
-        if data['prompt'] == words[0]:
+        word_guess = data['prompt'].lower()
+        if word_guess == words[0].lower():
             mystery_blurb = replace_first_underscore_sequence(mystery_blurb, words[0])
-            if words.len() == 1:
+            if len(words) == 1:
                 count = 2
-                return mystery_blurb + "\nCongratulations you solved the the braindrAIn!, to keep on playing type a new topic."
+                tempString = ""
+                words = []
+                no_no_word = ""
+                chat_reply = {"message": "Send a new prompt to play again!"}
+                return jsonify(chat_reply)
             words = words[1:]
-            return mystery_blurb + "\n" + correct_guess
+            chat_reply = {"message": mystery_blurb + "\n\n" + correct_guess}
+            return jsonify(chat_reply)
         try:
             messages = [{"role": "system", "content": ""}]
             messages.append({"role": "user", "content": "Give a hint that would help someone guess the the word: " + words[0]})
@@ -75,29 +81,45 @@ def generateChatGPT():
                 max_tokens=150
             )
             chat_reply = response.choices[0].message.content
-            chat_reply = {"message": mystery_blurb + "\nWrong, Hint:" + chat_reply}
+            chat_reply = {"message": mystery_blurb + "\n\nWrong, Hint:" + chat_reply}
             return jsonify(chat_reply)
         except Exception as e:
             return jsonify({"error": str(e)}), 500
     if count == 1:
-        count = 0
-        try:
-            messages = [{"role": "system", "content": "Previously you created this blurb: " + tempString + "(With this blurb we will play a game, listen to the rules carefully)"}]
-            messages.append({"role": "user", "content": "Remove 7 key words from the blurb and add them to a list (It can't be: " + no_no_word + "). Return the list such that its in the following format: List: word1, word2, word3, ..."})
+        if data['prompt'] == "COMPLETEDRAIN":
+            count = 0
+            try:
+                messages = [{"role": "system", "content": "Previously you created this blurb: " + tempString + "(With this blurb we will play a game, listen to the rules carefully)"}]
+                messages.append({"role": "user", "content": "Remove 7 key words from the blurb and add them to a list (It can't be: " + no_no_word + " or numbers). Return the list such that its in the following format: List: word1, word2, word3, ..."})
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages = messages,
+                    top_p=1,
+                    temperature=0.9,
+                    max_tokens=150
+                )
+                chat_reply = response.choices[0].message.content
+                words = chat_reply.replace("List: ", "").split(", ")
+                mystery_blurb = replace_first_occurrence_with_underscores(tempString, words)
+                chat_reply = {"message": mystery_blurb}
+                return jsonify(chat_reply)
+            except Exception as e:
+                return jsonify({"error": str(e)}), 500
+        else:
+            messages = [{"role": "system", "content": "You are a chatbot that will soon be given a topic to discuss. Provide a blurb that's  400 characters that contains some facts and random details."}]
+            messages.append({"role": "user", "content": data['prompt']})
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages = messages,
-                top_p=1,
-                temperature=0.9,
+                top_p=0.8,
+                temperature=1,
                 max_tokens=150
             )
+            no_no_word = data['prompt']
             chat_reply = response.choices[0].message.content
-            words = chat_reply.replace("List: ", "").split(", ")
-            mystery_blurb = replace_first_occurrence_with_underscores(tempString, words)
-            chat_reply = {"message": mystery_blurb}
+            tempString = chat_reply
+            chat_reply = {"message": chat_reply}
             return jsonify(chat_reply)
-        except Exception as e:
-            return jsonify({"error": str(e)}), 500
     
     if count == 2:
         count = 1
@@ -109,8 +131,8 @@ def generateChatGPT():
             response = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages = messages,
-                top_p=1,
-                temperature=0.9,
+                top_p=0.8,
+                temperature=1,
                 max_tokens=150
             )
             no_no_word = data['prompt']
