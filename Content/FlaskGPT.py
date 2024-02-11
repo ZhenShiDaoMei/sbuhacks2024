@@ -59,11 +59,14 @@ def generateChatGPT():
     if count == 0:
         if data['prompt'] == words[0]:
             mystery_blurb = replace_first_underscore_sequence(mystery_blurb, words[0])
-            if words.len() == 1:
+            if len(words) == 1:
                 count = 2
-                return mystery_blurb + "\nCongratulations you solved the the braindrAIn!, to keep on playing type a new topic."
+                tempString = ""
+                words = []
+                no_no_word = ""
+                return mystery_blurb + "\n\nCongratulations you solved the the braindrAIn!, to keep on playing type a new topic."
             words = words[1:]
-            return mystery_blurb + "\n" + correct_guess
+            return mystery_blurb + "\n\n" + correct_guess
         try:
             messages = [{"role": "system", "content": ""}]
             messages.append({"role": "user", "content": "Give a hint that would help someone guess the the word: " + words[0]})
@@ -75,7 +78,7 @@ def generateChatGPT():
                 max_tokens=150
             )
             chat_reply = response.choices[0].message.content
-            chat_reply = {"message": mystery_blurb + "\nWrong, Hint:" + chat_reply}
+            chat_reply = {"message": mystery_blurb + "\n\nWrong, Hint:" + chat_reply}
             return jsonify(chat_reply)
         except Exception as e:
             return jsonify({"error": str(e)}), 500
