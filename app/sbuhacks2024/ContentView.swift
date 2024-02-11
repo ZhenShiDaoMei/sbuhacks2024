@@ -7,19 +7,46 @@ struct ContentView: View {
     @State private var showDrainView = false
     
     @State private var isPressed = false // Tracks the button's state
-    
+    @State private var isSpinning = false
+
     var body: some View {
         VStack {
             if (showDrainView) {
-                
+                Text("braindrAIn")
+                    .font(.headline)
+                    .padding()
+                Spacer()
+                HStack {
+                    TextField("Guess the word at the first blank!", text: $inputText)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .submitLabel(.go)
+                        .onSubmit {
+                            viewModel.fetchGeneratedText(prompt: inputText)
+                        }
+                        .padding(.leading, 20) // Add padding to the left
+                        .padding(.trailing, 8) // Existing right padding
+                    Button(action: {
+                        viewModel.fetchGeneratedText(prompt: inputText)
+                    }) {
+                        Image(systemName: "arrow.right.circle.fill")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.blue)
+                    }
+                    .padding(.trailing, 17)
+                }
             }
             else if (showSecondView) {
-                // Second view content
+                Text("braindrAIn")
+                    .font(.headline)
+                    .padding()
                 Spacer()
                 Text(viewModel.outputText)
                     .padding()
                     .lineSpacing(10)
-                Spacer()
+                    .scaleEffect(isSpinning ? 0.1 : 1)
+                    .rotationEffect(.degrees(isSpinning ? 360 : 0))
+                    .animation(Animation.linear(duration: 2.5), value: isSpinning)
                 Spacer()
                 HStack {
                     Text("Tell me about")
@@ -44,7 +71,9 @@ struct ContentView: View {
                 }
                 .padding(.bottom, 20)
                 Button(action: {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    isSpinning.toggle()
+                    inputText = ""
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                         isPressed.toggle()
                         showDrainView = true
                     }
@@ -62,7 +91,8 @@ struct ContentView: View {
                 .padding(.horizontal)
                 Spacer()
             } else {
-                // First view content
+                Spacer()
+                Spacer()
                 Image(systemName: "brain") // Your actual logo here
                     .resizable()
                     .scaledToFit()
@@ -94,6 +124,10 @@ struct ContentView: View {
                     }
                     .padding(.trailing, 12)
                 }
+                Spacer()
+                Spacer()
+                Spacer()
+                Text("Created by Bryan Wong and Jason Wu")
             }
         }
     }
