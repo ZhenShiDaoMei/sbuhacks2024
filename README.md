@@ -11,7 +11,8 @@ The main concept behind the app is to generate a prompt using the topic given by
 
 ## Tech Stack  
 * Frontend: Swift, SwiftUI.
-* Backend: Python.
+* Backend: Python (Flask).
+* APIs: ChatGPT API.
 
 ## Future Improvements  
 * Implement a daily challenge (like wordle) and a daily streak.
